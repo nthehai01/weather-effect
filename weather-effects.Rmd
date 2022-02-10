@@ -166,4 +166,138 @@ head(stormdata)
 ```
 
 
+## Analysis
+
+In this part, we will group the records that have same ```EVTYPE``` and then calculate the sum of each feature:
+```{r}
+library(dplyr)
+group <- stormdata %>% 
+    group_by(EVTYPE) %>%
+    summarise_all(sum)
+```
+
+```{r}
+head(group)
+```
+
+
 ## Results
+
+**Function to generate a bar plot:**
+
+This function called ```generate.bar``` with input:
+
+- ```df```: data frame
+- ```x```: value for x-axis
+- ```y```: value for y-axis
+- ```x.lab```: label for x-axis
+- ```y.lab```: label for y-axis
+
+```{r}
+library(ggplot2)
+generate.bar <- function(df, x, y, x.lab, y.lab) {
+    p <- ggplot(df, aes(x = x, y = y, fill = x))
+    p <- p + geom_bar(stat = "identity") +
+        xlab(x.lab) +
+        ylab(y.lab) +
+        theme(legend.position = "none") +  ## remove legends
+        theme(text = element_text(size = 10)) +  ## resize text
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))  ## rotate labels
+}
+```
+
+
+#### Question 1: Across the United States, which types of events (as indicated in the ```EVTYPE``` variable) are most harmful with respect to population health?
+
+**In this part, we will generate the bar plots to find the top 5 weather events that are most harmful to the US citizen for each type of damage:**
+
+*In term of Fatalities damage:*
+
+Extract the top 5 worst harmful events that result in Fatalities damage:
+```{r}
+fatalities <- group[order(-group$FATALITIES), ]
+fatalities <- fatalities[1:5, ]
+```
+
+```{r}
+head(fatalities)
+```
+
+Create a plot for this damage:
+```{r}
+fatalities.plot <- generate.bar(fatalities, 
+                                fatalities$EVTYPE, fatalities$FATALITIES,
+                                "Type of event", "Fatalities damage")
+```
+
+*In term of Injuries damage:*
+
+Extract the top 5 worst harmful events that result in Injuries damage:
+```{r}
+injuries <- group[order(-group$INJURIES), ]
+injuries <- injuries[1:5, ]
+```
+
+```{r}
+head(injuries)
+```
+
+Create a plot for this damage:
+```{r}
+injuries.plot <- generate.bar(injuries, 
+                                injuries$EVTYPE, injuries$INJURIES,
+                                "Type of event", "Injuries damage")
+```
+
+*Plot both these types of damage into a panel*
+```{r}
+library(gridExtra)
+grid.arrange(fatalities.plot, injuries.plot, ncol = 2)
+```
+
+#### Question 2: Across the United States, which types of events have the greatest economic consequences?
+
+**In this part, we will generate the bar plots to find the top 5 weather events that are most harmful to the US citizen for each type of economic consequences:**
+
+*In term of Property consequences:*
+
+Extract the top 5 worst harmful events that result in Property consequences:
+```{r}
+property <- group[order(-group$PROPDMG), ]
+property <- property[1:5, ]
+```
+
+```{r}
+head(property)
+```
+
+Create a plot for this economic consequences:
+```{r}
+property.plot <- generate.bar(property, 
+                              property$EVTYPE, property$PROPDMG,
+                              "Type of event", "Property consequences")
+```
+
+*In term of Crop consequences:*
+
+Extract the top 5 worst harmful events that result in Crop consequences:
+```{r}
+crop <- group[order(-group$CROPDMG), ]
+crop <- crop[1:5, ]
+```
+
+```{r}
+head(crop)
+```
+
+Create a plot for this economic consequences:
+```{r}
+crop.plot <- generate.bar(crop, 
+                          crop$EVTYPE, crop$CROPDMG,
+                          "Type of event", "Injuries damage")
+```
+
+*Plot both these types of economic consequence into a panel*
+```{r}
+grid.arrange(property.plot, crop.plot, nrow = 2)
+```
