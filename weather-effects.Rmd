@@ -195,14 +195,15 @@ This function called ```generate.bar``` with input:
 
 ```{r}
 library(ggplot2)
-generate.bar <- function(df, x, y, x.lab, y.lab) {
+generate.bar <- function(df, x, y, x.lab, y.lab, title) {
     p <- ggplot(df, aes(x = x, y = y, fill = x))
     p <- p + geom_bar(stat = "identity") +
-        xlab(x.lab) +
-        ylab(y.lab) +
-        theme(legend.position = "none") +  ## remove legends
-        theme(text = element_text(size = 10)) +  ## resize text
-        theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))  ## rotate labels
+      xlab(x.lab) +
+      ylab(y.lab) +
+      ggtitle(title) +
+      theme(legend.position = "none") +  ## remove legends
+      theme(text = element_text(size = 12)) +  ## resize text
+      theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))  ## rotate labels
 }
 ```
 
@@ -227,7 +228,8 @@ Create a plot for this damage:
 ```{r}
 fatalities.plot <- generate.bar(fatalities, 
                                 fatalities$EVTYPE, fatalities$FATALITIES,
-                                "Type of event", "Fatalities damage")
+                                "Type of event", "Fatalities damage", 
+                                "Top 5 most harmful events damaged in Fatalities")
 ```
 
 *In term of Injuries damage:*
@@ -245,12 +247,13 @@ head(injuries)
 Create a plot for this damage:
 ```{r}
 injuries.plot <- generate.bar(injuries, 
-                                injuries$EVTYPE, injuries$INJURIES,
-                                "Type of event", "Injuries damage")
+                              injuries$EVTYPE, injuries$INJURIES,
+                              "Type of event", "Injuries damage",
+                              "Top 5 most harmful events damaged in Injuries")
 ```
 
 *Plot both these types of damage into a panel*
-```{r}
+```{r, fig.height=5, fig.width=10}
 library(gridExtra)
 grid.arrange(fatalities.plot, injuries.plot, ncol = 2)
 ```
@@ -275,7 +278,8 @@ Create a plot for this economic consequences:
 ```{r}
 property.plot <- generate.bar(property, 
                               property$EVTYPE, property$PROPDMG,
-                              "Type of event", "Property consequences")
+                              "Type of event", "Property consequences",
+                              "Top 5 most harmful events damaged in Property")
 ```
 
 *In term of Crop consequences:*
@@ -294,10 +298,11 @@ Create a plot for this economic consequences:
 ```{r}
 crop.plot <- generate.bar(crop, 
                           crop$EVTYPE, crop$CROPDMG,
-                          "Type of event", "Injuries damage")
+                          "Type of event", "Injuries damage",
+                          "Top 5 most harmful events damaged in Crop")
 ```
 
 *Plot both these types of economic consequence into a panel*
-```{r}
-grid.arrange(property.plot, crop.plot, nrow = 2)
+```{r, fig.height=7, fig.width=10}
+grid.arrange(property.plot, crop.plot, ncol = 2)
 ```
