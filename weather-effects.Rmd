@@ -1,5 +1,5 @@
 ---
-title: "Weather Effects"
+title: "Weather Effects In USA"
 author: "nthehai01"
 date: "2/10/2022"
 output: html_document
@@ -52,6 +52,12 @@ if(!file.exists(downloadedFile)) {
     bunzip2(downloadedFile, destname = "./data/stormdata.csv", remove = FALSE)
 }
 ```
+
+Check if required data is downloaded
+```{r}
+file.exists(downloadedFile)
+```
+
 
 #### Loading data
 
@@ -258,6 +264,8 @@ library(gridExtra)
 grid.arrange(fatalities.plot, injuries.plot, ncol = 2)
 ```
 
+&rarr; As can be seen from the plot, the *TORNADO* event is the most harmful type of event resulting in both Fatalities and Injuries consequences. Its damage is very high compared to the figures of other kinds of events, almost 2.5 times and 80 times higher than the total damage for the second-worst harmful events in terms of Fatalities and Injuries, respectively. 
+
 #### Question 2: Across the United States, which types of events have the greatest economic consequences?
 
 **In this part, we will generate the bar plots to find the top 5 weather events that are most harmful to the US citizen for each type of economic consequences:**
@@ -298,7 +306,7 @@ Create a plot for this economic consequences:
 ```{r}
 crop.plot <- generate.bar(crop, 
                           crop$EVTYPE, crop$CROPDMG,
-                          "Type of event", "Injuries damage",
+                          "Type of event", "Crop damage",
                           "Top 5 most harmful events damaged in Crop")
 ```
 
@@ -306,3 +314,5 @@ crop.plot <- generate.bar(crop,
 ```{r, fig.height=7, fig.width=10}
 grid.arrange(property.plot, crop.plot, ncol = 2)
 ```
+
+&rarr; As can be seen from the plot, the *FLOOD* and *DROUGHT* events are the most harmful type of event resulting in Property and Crop economic consequences with approximately 15x10^10^ and 1.4x10^10^ in term of total damage, respectively. 

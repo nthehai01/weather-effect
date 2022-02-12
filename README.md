@@ -1,4 +1,4 @@
-# Weather Effects Project
+# Weather Effects In USA Project
 This is the Course Project 2 of [Reproducible Research](https://www.coursera.org/learn/reproducible-research) on Coursera.
 
 ## Introduction
